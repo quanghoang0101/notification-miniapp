@@ -21,8 +21,9 @@ const App = () => {
   }, []);
 
   return (
-    <View>
-      <FlatList data={dataSource}
+    <View style={styles.container}>
+      <FlatList
+        data={dataSource}
         renderItem={({item}) => ItemList(item)}
         keyExtractor={(_item, index) => `basicListEntry-${index}`}>
       </FlatList>
@@ -55,16 +56,8 @@ const ItemList = (item: INotificationItemProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 22,
   },
-  sectionHeader: {
-    paddingTop: 2,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 2,
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
+  
   rowContainer: {
     flexDirection:'row',
     height: 60,
