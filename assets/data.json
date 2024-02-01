@@ -1,0 +1,50 @@
+[
+    {
+        "type": "Electric",
+        "title": "Electric bill",
+        "amount": 420,
+        "status": 1,
+        "time": "11:00 AM",
+        "income": false
+    },
+    {
+        "type": "Water",
+        "title": "Water bill",
+        "amount": 300,
+        "status": 1,
+        "time": "1:00 PM",
+        "income": false
+    },
+    {
+        "type": "Market",
+        "title": "Market",
+        "amount": 200,
+        "status": 1,
+        "time": "4:20 AM",
+        "income": false
+    },
+    {
+        "type": "Scan",
+        "title": "Scan Payment",
+        "amount": 400,
+        "status": 1,
+        "time": "5:00 PM",
+        "income": false
+    },
+    {
+        "type": "QR",
+        "title": "QR Payment",
+        "amount": 200,
+        "status": 1,
+        "time": "2:25 PM",
+        "income": true
+    },
+    {
+        "type": "TV",
+        "title": "Television bill",
+        "amount": 350,
+        "status": 2,
+        "time": "3:00 PM",
+        "income": false
+    }
+]

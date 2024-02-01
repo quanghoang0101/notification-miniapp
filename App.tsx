@@ -7,114 +7,113 @@
  *
  * @format
  */
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 
-import React, {type PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section: React.FC<
-  PropsWithChildren<{
-    title: string;
-  }>
-> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+import json from './assets/data.json';
+import INotificationItemProps, { getColor, getIcon, getInComeColor, getStatusColor, transformStatus } from './models/Notification';
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const [dataSource, setDataSource] = useState<INotificationItemProps[]>([])
+  useEffect(() => {
+    const items: INotificationItemProps[]  = JSON.parse(JSON.stringify(json))
+    setDataSource(items)
+  }, []);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <View>
+      <FlatList data={dataSource}
+        renderItem={({item}) => ItemList(item)}
+        keyExtractor={(_item, index) => `basicListEntry-${index}`}>
+      </FlatList>
+    </View>
   );
-};
+
+}
+
+const ItemList = (item: INotificationItemProps) => {
+  return (
+    <View style={styles.rowContainer}>
+      <View style={{flexDirection: "row", paddingLeft: 16}}>
+        <View style={[styles.iconContainer, {backgroundColor: getColor(item.type)}]}>
+          <Image style={styles.icon} source={getIcon(item.type)}></Image>
+        </View>
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={[styles.subtitle, {color: getInComeColor(item.income)}]}>{`${item.income ? "+" : "-"}$${item.amount}`}</Text>
+        </View>
+      </View>
+      
+      <View style={styles.statusContainer}>
+        <Text style={[styles.status, {color: getStatusColor(item.status)}]}>{transformStatus(item.status)}</Text>
+        <Text style={styles.time}>{item.time}</Text>
+      </View>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    paddingTop: 22,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  sectionHeader: {
+    paddingTop: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 2,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  rowContainer: {
+    flexDirection:'row',
+    height: 60,
+    justifyContent: "space-between"
   },
-  highlight: {
-    fontWeight: '700',
+
+  iconContainer: {
+    backgroundColor: "#FABE3C",
+    width: 48,
+    height: 48,
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: 'center',
+    borderRadius: 24
   },
+  icon: {
+    width: 24,
+    height: 24,
+    resizeMode: "center"
+  },
+  descriptionContainer: {
+    paddingLeft: 12,
+    alignSelf: "center",
+    justifyContent: "center"
+  },
+
+  title: {
+    color: "#232440",
+    fontSize: 17
+  },
+  subtitle: {
+    fontSize: 15
+  },
+  statusContainer: {
+    paddingRight: 16,
+    alignSelf: "center",
+    justifyContent: "center"
+  },
+  status: {
+    fontSize: 15,
+    textAlign: "right"
+  },
+  time: {
+    fontSize: 13,
+    textAlign: "right",
+    fontWeight: "400",
+    color: "#6E6E82"
+  }
 });
 
-export default App;
+export default App
+
